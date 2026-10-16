@@ -17,3 +17,5 @@ services:
         sync: false # paste the Neon connection string in the Render dashboard
       - key: PUBLIC_ORIGIN
         sync: false # e.g. https://compenstation.onrender.com
+      - key: REDIRECT_HOSTS
+        sync: false # optional: old hosts that redirect to PUBLIC_ORIGIN, e.g. compenstation.onrender.com

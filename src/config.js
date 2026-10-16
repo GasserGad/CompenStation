@@ -36,6 +36,21 @@ export function loadConfig(env = process.env) {
     throw new Error("PUBLIC_ORIGIN must use https in production");
   }
 
+  // Old addresses (e.g. the onrender.com one after moving to a custom domain)
+  // that should send visitors to PUBLIC_ORIGIN instead of serving the app.
+  const redirectHosts = (env.REDIRECT_HOSTS ?? "")
+    .split(",")
+    .map((host) => host.trim().toLowerCase())
+    .filter(Boolean);
+  for (const host of redirectHosts) {
+    if (!/^[a-z0-9.-]+$/.test(host)) {
+      throw new Error("REDIRECT_HOSTS must be a comma-separated list of hostnames like old.example.com");
+    }
+  }
+  if (redirectHosts.includes(new URL(origin).hostname)) {
+    throw new Error("REDIRECT_HOSTS must not include the PUBLIC_ORIGIN host");
+  }
+
   const trustProxyRaw = env.TRUST_PROXY ?? "";
   const trustProxy = trustProxyRaw === "" || trustProxyRaw === "0" || trustProxyRaw === "false"
     ? false
@@ -49,6 +64,7 @@ export function loadConfig(env = process.env) {
     // Neon and most hosted Postgres require TLS; local development usually doesn't.
     databaseSsl: env.DATABASE_SSL === "false" ? false : isProduction || env.DATABASE_SSL === "true",
     publicOrigin: origin,
+    redirectHosts: Object.freeze(redirectHosts),
     trustProxy,
     sessionHours: int(env.SESSION_HOURS, 8, "SESSION_HOURS", 1, 72),
     demoMode: env.DEMO_MODE === "true",

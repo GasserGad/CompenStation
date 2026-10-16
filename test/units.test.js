@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import { describe, it } from "node:test";
+import request from "supertest";
+import { createApp } from "../src/app.js";
 import { hashPassword, verifyPassword } from "../src/auth/password.js";
 import { readCookie } from "../src/auth/sessions.js";
 import { loadConfig } from "../src/config.js";
@@ -102,8 +104,53 @@ describe("config", () => {
     assert.throws(() => loadConfig({ DATABASE_URL: "x", NODE_ENV: "production", PUBLIC_ORIGIN: "http://a.com" }), /https/);
   });
 
+  it("validates REDIRECT_HOSTS", () => {
+    const base = { DATABASE_URL: "x", PUBLIC_ORIGIN: "https://new.example.com" };
+    assert.deepEqual(loadConfig(base).redirectHosts, []);
+    assert.deepEqual(loadConfig({ ...base, REDIRECT_HOSTS: " Old.Example.com , other.example.com" }).redirectHosts,
+      ["old.example.com", "other.example.com"]);
+    assert.throws(() => loadConfig({ ...base, REDIRECT_HOSTS: "bad host!" }), /REDIRECT_HOSTS/);
+    assert.throws(() => loadConfig({ ...base, REDIRECT_HOSTS: "new.example.com" }), /REDIRECT_HOSTS/);
+  });
+
   it("reads cookies from a header", () => {
     assert.equal(readCookie("a=1; sid=abc%3D; b=2", "sid"), "abc=");
     assert.equal(readCookie(undefined, "sid"), null);
+  });
+});
+
+describe("old-address redirects", () => {
+  const config = loadConfig({
+    DATABASE_URL: "x",
+    PUBLIC_ORIGIN: "https://new.example.com",
+    REDIRECT_HOSTS: "old.example.com",
+  });
+  // These requests never reach the database except /healthz, which gets a stub.
+  const pool = /** @type {any} */ ({ query: async () => ({ rows: [] }) });
+  const app = createApp({ pool, config });
+
+  it("sends page visits on an old host to the same path on PUBLIC_ORIGIN", async () => {
+    const res = await request(app).get("/login?next=paystubs").set("Host", "old.example.com");
+    assert.equal(res.status, 301);
+    assert.equal(res.headers.location, "https://new.example.com/login?next=paystubs");
+  });
+
+  it("keeps the method for non-GET requests (308)", async () => {
+    const res = await request(app).post("/api/auth/login").set("Host", "OLD.example.com:443").send({});
+    assert.equal(res.status, 308);
+    assert.equal(res.headers.location, "https://new.example.com/api/auth/login");
+  });
+
+  it("never redirects outside PUBLIC_ORIGIN, even for odd paths", async () => {
+    const res = await request(app).get("//evil.example.net/x").set("Host", "old.example.com");
+    assert.ok(res.headers.location.startsWith("https://new.example.com/"));
+  });
+
+  it("leaves the health check and the main host alone", async () => {
+    const health = await request(app).get("/healthz").set("Host", "old.example.com");
+    assert.equal(health.status, 200);
+    const main = await request(app).get("/api/unknown").set("Host", "new.example.com");
+    assert.notEqual(main.status, 301);
+    assert.notEqual(main.status, 308);
   });
 });

@@ -40,6 +40,20 @@ export function createApp({ pool, config, log = () => {} }) {
     next();
   });
 
+  // Visits to an old address (listed in REDIRECT_HOSTS) go to PUBLIC_ORIGIN with
+  // the same path, so links shared before a domain move keep working and logins
+  // always happen on the one origin the CSRF check accepts. The target host is
+  // fixed by config, so this can't be used as an open redirect.
+  if (config.redirectHosts.length > 0) {
+    const redirectHosts = new Set(config.redirectHosts);
+    app.use((req, res, next) => {
+      const host = (req.headers.host ?? "").toLowerCase().replace(/:\d+$/, "");
+      if (!redirectHosts.has(host) || req.path === "/healthz") return next();
+      const status = req.method === "GET" || req.method === "HEAD" ? 301 : 308;
+      res.redirect(status, config.publicOrigin + req.originalUrl);
+    });
+  }
+
   app.use(
     helmet({
       contentSecurityPolicy: {
