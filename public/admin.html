@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CompenStation · Admin</title>
+  <link rel="icon" href="/img/logo.png">
+  <link rel="stylesheet" href="/css/app.css">
+  <script type="module" src="/js/admin.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/admin"><img src="/img/logo.png" alt="">CompenStation</a>
+    <div class="user-chip">
+      <span class="avatar" id="user-initials" aria-hidden="true"></span>
+      <span id="user-name"></span>
+      <button class="btn btn-secondary btn-small" id="logout" type="button">Log out</button>
+    </div>
+  </header>
+
+  <div class="shell">
+    <nav class="sidebar" aria-label="Admin sections">
+      <a href="#dashboard" data-section="dashboard"><img src="/icons/home_dark.svg" alt="">Dashboard</a>
+      <a href="#timesheets" data-section="timesheets"><img src="/icons/edit_dark.svg" alt="">Timesheets <span class="badge-count" id="pending-badge" hidden></span></a>
+      <a href="#payroll" data-section="payroll"><img src="/icons/add_dark.svg" alt="">Payroll</a>
+      <a href="#employees" data-section="employees"><img src="/icons/groups_dark.svg" alt="">Employees</a>
+      <a href="#audit" data-section="audit"><img src="/icons/settings_dark.svg" alt="">Audit log</a>
+    </nav>
+    <main class="page" id="view" tabindex="-1"></main>
+  </div>
+
+  <footer class="site-footer">
+    <span>© 2026 CompenStation</span>
+    <span><a href="/terms">Terms of Use</a> · <a href="/privacy">Privacy Policy</a></span>
+  </footer>
+</body>
+</html>

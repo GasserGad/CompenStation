@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CompenStation · My pay</title>
+  <link rel="icon" href="/img/logo.png">
+  <link rel="stylesheet" href="/css/app.css">
+  <script type="module" src="/js/employee.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="/employee"><img src="/img/logo.png" alt="">CompenStation</a>
+    <div class="user-chip">
+      <span class="avatar" id="user-initials" aria-hidden="true"></span>
+      <span id="user-name"></span>
+      <button class="btn btn-secondary btn-small" id="logout" type="button">Log out</button>
+    </div>
+  </header>
+
+  <main class="page">
+    <div class="stats" id="stats"></div>
+
+    <div class="grid-2">
+      <div>
+        <section class="card">
+          <div class="card-head">
+            <h2>My information</h2>
+            <button class="btn btn-secondary btn-small" id="edit-profile" type="button">Edit</button>
+          </div>
+          <dl class="info" id="profile"></dl>
+          <form id="profile-form" hidden novalidate>
+            <div class="field"><label for="phone">Phone</label><input id="phone" name="phone" maxlength="30" autocomplete="tel"></div>
+            <div class="field"><label for="address">Address</label><input id="address" name="address" maxlength="200" autocomplete="street-address"></div>
+            <div class="form-actions">
+              <button class="btn btn-small" type="submit">Save</button>
+              <button class="btn btn-secondary btn-small" type="button" id="cancel-profile">Cancel</button>
+            </div>
+          </form>
+        </section>
+
+        <section class="card">
+          <h2>Submit a timesheet</h2>
+          <form id="timesheet-form" novalidate>
+            <div class="form-grid">
+              <div class="field"><label for="periodStart">Period start</label><input id="periodStart" name="periodStart" type="date" required></div>
+              <div class="field"><label for="periodEnd">Period end</label><input id="periodEnd" name="periodEnd" type="date" required></div>
+            </div>
+            <div class="field"><label for="hoursWorked">Hours worked</label><input id="hoursWorked" name="hoursWorked" type="number" min="0.25" max="120" step="0.25" required></div>
+            <div class="field"><label for="notes">Notes (optional)</label><textarea id="notes" name="notes" maxlength="500"></textarea></div>
+            <button class="btn" type="submit">Submit timesheet</button>
+          </form>
+        </section>
+
+        <section class="card">
+          <h2>Benefits</h2>
+          <div id="benefits"></div>
+        </section>
+
+        <section class="card">
+          <h2>Taxes and deductions</h2>
+          <div id="deductions"></div>
+        </section>
+      </div>
+
+      <div>
+        <section class="card">
+          <h2>Paystubs</h2>
+          <div id="paystubs"></div>
+        </section>
+
+        <section class="card">
+          <h2>My timesheets</h2>
+          <div class="table-wrap" id="timesheets"></div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 CompenStation</span>
+    <span><a href="/terms">Terms of Use</a> · <a href="/privacy">Privacy Policy</a></span>
+  </footer>
+</body>
+</html>

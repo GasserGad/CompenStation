@@ -1,0 +1,25 @@
+# One grouped pull request per ecosystem each month, instead of one per package.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      npm-dependencies:
+        patterns: ["*"]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
+    groups:
+      github-actions:
+        patterns: ["*"]
+  - package-ecosystem: docker
+    directory: /
+    schedule:
+      interval: monthly
+    ignore:
+      # Only move between even-numbered (long-term-support) Node versions, by hand.
+      - dependency-name: node
+        update-types: ["version-update:semver-major"]

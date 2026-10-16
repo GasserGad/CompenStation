@@ -1,27 +1,37 @@
 {
   "name": "compenstation",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "2.0.0",
+  "description": "CompenStation: a payroll system for timesheets, approvals, deductions, benefits and paystubs",
+  "type": "module",
+  "main": "src/server.js",
+  "private": true,
+  "license": "UNLICENSED",
+  "author": "Gasser Gadabdelkader",
+  "engines": {
+    "node": ">=22"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "migrate": "node scripts/migrate.js",
+    "seed:demo": "node scripts/seed-demo.js",
+    "test": "node --test --test-concurrency=1 --test-reporter=spec \"test/**/*.test.js\"",
+    "lint": "eslint .",
+    "check": "npm run lint && npm test"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/fahadMasood7/CompenStation.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/fahadMasood7/CompenStation/issues"
-  },
-  "homepage": "https://github.com/fahadMasood7/CompenStation#readme",
   "dependencies": {
-    "cors": "^2.8.6",
-    "dotenv": "^17.3.1",
-    "express": "^5.2.1",
-    "mysql2": "^3.18.2"
+    "dotenv": "^18.0.8",
+    "express": "^5.3.0",
+    "express-rate-limit": "^8.7.1",
+    "helmet": "^8.3.0",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "eslint": "^10.12.0",
+    "eslint-plugin-security": "^4.2.0",
+    "globals": "^17.13.0",
+    "supertest": "^7.3.1"
   }
 }
