@@ -115,9 +115,8 @@ test/              unit and API tests
 CompenStation started as a team project at the **CUNY College of Staten Island** (spring 2026). The original repository is [tasnimhanaif/CompenStation](https://github.com/tasnimhanaif/CompenStation).
 
 - **Tasnim Hanaif** and **Jason Dilone**: front end
-- **Gasser Gadabdelkader**: backend and API routing
+- **Gasser Gadabdelkader**: backend, API routing and security
 - **Mahir Shahriyar** and **Fahad Masood**: SQL database
-- **Toby**: security
 
 The design (colors, Lora typeface, logo and icons) and the paystub formulas come from that project. Gasser Gadabdelkader rebuilt it into this deployable version: a PostgreSQL schema, real authentication, the security hardening, the new interface, tests, CI and hosting.
 
