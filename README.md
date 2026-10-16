@@ -114,10 +114,10 @@ test/              unit and API tests
 
 CompenStation started as a team project at the **CUNY College of Staten Island** (spring 2026). The original repository is [tasnimhanaif/CompenStation](https://github.com/tasnimhanaif/CompenStation).
 
-- **Tasnim Hanaif** and **Jason Dilone**: front end, design and logo
-- **Fahad Masood**: database schema and queries
-- **Mahir Shahriyar**: payroll backend logic and database connection
-- **Gasser Gadabdelkader**: backend API routes (authentication, employee, admin and payroll endpoints)
+- **Tasnim Hanaif** and **Jason Dilone**: front end
+- **Gasser Gadabdelkader**: backend and API routing
+- **Mahir Shahriyar** and **Fahad Masood**: SQL database
+- **Toby**: security
 
 The design (colors, Lora typeface, logo and icons) and the paystub formulas come from that project. Gasser Gadabdelkader rebuilt it into this deployable version: a PostgreSQL schema, real authentication, the security hardening, the new interface, tests, CI and hosting.
 
@@ -130,4 +130,4 @@ The design (colors, Lora typeface, logo and icons) and the paystub formulas come
 
 [Terms of Use](https://github.com/GasserGad/CompenStation/blob/main/public/terms.html) · [Privacy Policy](https://github.com/GasserGad/CompenStation/blob/main/public/privacy.html). Both are also linked from the site footer.
 
-No open-source license has been chosen yet. The original project was a team effort without one, so all rights stay with the authors listed above. Please ask before reusing the code or assets.
+Released under the [MIT License](LICENSE), with the agreement of the whole original team. The Lora typeface is under the [SIL Open Font License](public/fonts/OFL.txt).

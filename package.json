@@ -5,7 +5,7 @@
   "type": "module",
   "main": "src/server.js",
   "private": true,
-  "license": "UNLICENSED",
+  "license": "MIT",
   "author": "Gasser Gadabdelkader",
   "engines": {
     "node": ">=22"
