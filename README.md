@@ -20,7 +20,7 @@
 
 ## Try it
 
-Open the live demo and pick an account on the login screen (all demo accounts share the password shown there):
+Open the [live demo](https://compenstation.gassergad.com) and pick an account on the login screen (all demo accounts share the password shown there):
 
 | Account | What you can do |
 | --- | --- |
@@ -51,7 +51,7 @@ Passwords are hashed with scrypt. Sessions use random tokens stored only as hash
 | Security | Helmet, express-rate-limit, Node's built-in `crypto` (scrypt, SHA-256) |
 | Front end | Plain HTML, CSS and JavaScript modules; Lora typeface |
 | Quality | `node:test` + Supertest against a real PostgreSQL, ESLint with security rules, CodeQL, gitleaks, Dependabot |
-| Hosting | Docker on [Render](https://render.com) (free plan) |
+| Hosting | Docker Compose on a DigitalOcean server, behind Caddy (automatic HTTPS) |
 
 ## Run it locally
 
