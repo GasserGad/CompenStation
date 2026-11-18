@@ -119,13 +119,33 @@ describe("config", () => {
   });
 });
 
+describe("health checks", () => {
+  const config = loadConfig({ DATABASE_URL: "x" });
+
+  it("/healthz answers without querying the database", async () => {
+    let queries = 0;
+    const pool = /** @type {any} */ ({ query: async () => { queries += 1; return { rows: [] }; } });
+    const res = await request(createApp({ pool, config })).get("/healthz");
+    assert.equal(res.status, 200);
+    assert.equal(queries, 0);
+  });
+
+  it("/readyz checks the database", async () => {
+    let queries = 0;
+    const pool = /** @type {any} */ ({ query: async () => { queries += 1; return { rows: [] }; } });
+    const res = await request(createApp({ pool, config })).get("/readyz");
+    assert.equal(res.status, 200);
+    assert.equal(queries, 1);
+  });
+});
+
 describe("old-address redirects", () => {
   const config = loadConfig({
     DATABASE_URL: "x",
     PUBLIC_ORIGIN: "https://new.example.com",
     REDIRECT_HOSTS: "old.example.com",
   });
-  // These requests never reach the database except /healthz, which gets a stub.
+  // These requests never reach the database, so the pool is a stub.
   const pool = /** @type {any} */ ({ query: async () => ({ rows: [] }) });
   const app = createApp({ pool, config });
 

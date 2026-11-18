@@ -48,7 +48,7 @@ export function createApp({ pool, config, log = () => {} }) {
     const redirectHosts = new Set(config.redirectHosts);
     app.use((req, res, next) => {
       const host = (req.headers.host ?? "").toLowerCase().replace(/:\d+$/, "");
-      if (!redirectHosts.has(host) || req.path === "/healthz") return next();
+      if (!redirectHosts.has(host) || req.path === "/healthz" || req.path === "/readyz") return next();
       const status = req.method === "GET" || req.method === "HEAD" ? 301 : 308;
       res.redirect(status, config.publicOrigin + req.originalUrl);
     });
@@ -93,7 +93,15 @@ export function createApp({ pool, config, log = () => {} }) {
     })
   );
 
-  app.get("/healthz", async (_req, res) => {
+  // Liveness: answers without touching the database, so the container health
+  // check (every 30s) never keeps a scale-to-zero database awake.
+  app.get("/healthz", (_req, res) => {
+    res.setHeader("Cache-Control", "no-store");
+    res.json({ status: "ok" });
+  });
+
+  // Readiness: also checks the database. For status pages and manual checks.
+  app.get("/readyz", async (_req, res) => {
     await pool.query("SELECT 1");
     res.setHeader("Cache-Control", "no-store");
     res.json({ status: "ok" });
